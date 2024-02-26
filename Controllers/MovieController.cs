@@ -46,6 +46,18 @@ namespace MovieDatabaseApi.Controllers
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, movie);
         }
 
+        [HttpPost("bulk")]
+        public async Task<ActionResult> PostMovies([FromBody] List<Movie> movies)
+        {
+            if (movies == null || !movies.Any())
+                return BadRequest("No movies provided");
+
+            _dbContext.Movies.AddRange(movies);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovie(int id)
         {
