@@ -20,6 +20,7 @@ namespace MovieDatabaseApi.Controllers
 
         // Here we are getting the list of all the movies inside the database
         [HttpGet]
+        [Authorize(Roles = "Reader,Writer")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
             if (_dbContext == null)
@@ -28,6 +29,7 @@ namespace MovieDatabaseApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Reader,Writer")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
             if (!_dbContext.Movies.Any())
@@ -42,6 +44,7 @@ namespace MovieDatabaseApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
             _dbContext.Movies.Add(movie);
@@ -50,6 +53,7 @@ namespace MovieDatabaseApi.Controllers
         }
 
         [HttpPost("bulk")]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> PostMovies([FromBody] List<Movie> movies)
         {
             if (movies == null || !movies.Any())
@@ -62,6 +66,7 @@ namespace MovieDatabaseApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> DeleteMovie(int id)
         {
             if(_dbContext.Movies == null)
@@ -78,6 +83,7 @@ namespace MovieDatabaseApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> PutMovie(int id, Movie movie)
         {
             if (id != movie.Id)

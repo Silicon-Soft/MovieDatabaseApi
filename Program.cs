@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MovieDatabaseApi.Data;
+using MovieDatabaseApi.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionStrings = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 
 builder.Services.AddDbContext<MovieAuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthConnection")));
+
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
